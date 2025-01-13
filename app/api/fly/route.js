@@ -1,7 +1,7 @@
 import clientPromise from "@/app/lib/mongodb";
 
 // Function to generate a random short string
-function generateFlyurl(length = 6) {
+function generateFlyurl(length = 8) {
     const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
     let result = "";
     for (let i = 0; i < length; i++) {
@@ -31,23 +31,30 @@ export async function POST(req) {
         const client = await clientPromise;
         const db = client.db("links-fly");
         const collection = db.collection("url");
-        console.log(await clientPromise);
 
-        // Generate a unique random flyurl
-        let flyurl;
-        let isUnique = false;
+        // Ensure unique index on flyurl
+        await collection.createIndex({ flyurl: 1 }, { unique: true });
 
-        while (!isUnique) {
-            flyurl = generateFlyurl(); // Generate a random string
-            const existingDoc = await collection.findOne({ flyurl });
-            if (!existingDoc) isUnique = true; // Exit loop if unique
+        // Generate and insert unique flyurl
+        let flyurl = generateFlyurl();
+
+        try {
+            await collection.insertOne({
+                url: body.url,
+                flyurl,
+            });
+        } catch (error) {
+            if (error.code === 11000) {
+                // Handle duplicate key error (retry once)
+                flyurl = generateFlyurl();
+                await collection.insertOne({
+                    url: body.url,
+                    flyurl,
+                });
+            } else {
+                throw error; // Propagate other errors
+            }
         }
-
-        // Insert the data into MongoDB
-        const result = await collection.insertOne({
-            url: body.url,
-            flyurl,
-        });
 
         // Return a success response with the generated flyurl
         return new Response(
@@ -55,17 +62,18 @@ export async function POST(req) {
                 success: true,
                 error: false,
                 message: "URL Shortened Successfully",
-                flyurl, // Include the generated flyurl in the response
+                flyurl,
             }),
             { status: 200, headers: { "Content-Type": "application/json" } }
         );
     } catch (error) {
-        console.error("Error occurred:", error);
+        console.error("Error occurred:", error.message, error.stack);
+
         return new Response(
             JSON.stringify({
                 success: false,
                 error: true,
-                message: "Failed to shorten URL",
+                message: error.message || "Failed to shorten URL",
             }),
             { status: 500, headers: { "Content-Type": "application/json" } }
         );
