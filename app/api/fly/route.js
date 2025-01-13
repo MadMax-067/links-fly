@@ -31,6 +31,7 @@ export async function POST(req) {
         const client = await clientPromise;
         const db = client.db("links-fly");
         const collection = db.collection("url");
+        console.log(await clientPromise);
 
         // Generate a unique random flyurl
         let flyurl;
