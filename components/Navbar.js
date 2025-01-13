@@ -5,7 +5,7 @@ const Navbar = () => {
     return (
         <nav>
             <div className="navbar">
-                <Link href="/" className="btn btn-ghost text-xl">
+                <Link href="/" className="btn btn-ghost text-xl font-bold">
                     <span className='w-8' ><img src="/URL.gif" /></span>
                     <span>Fly Links</span>
                 </Link>
