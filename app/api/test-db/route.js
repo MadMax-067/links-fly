@@ -1,24 +1,39 @@
-export default async function handler(req, res) {
+import { MongoClient } from "mongodb";
+
+export async function GET(req) {
     try {
+        // Read the MongoDB URI from environment variables
         const mongodbUri = process.env.MONGODB_URI;
 
         if (!mongodbUri) {
-            return res.status(400).json({
-                success: false,
-                message: "MONGODB_URI is not set in the environment variables.",
-            });
+            return new Response(
+                JSON.stringify({
+                    success: false,
+                    message: "MONGODB_URI is not set in environment variables.",
+                }),
+                { status: 400, headers: { "Content-Type": "application/json" } }
+            );
         }
 
-        return res.status(200).json({
-            success: true,
-            message: "MONGODB_URI is set correctly.",
-            uri: mongodbUri, // For security, avoid returning the full URI in production
-        });
+        // Attempt to connect to MongoDB
+        const client = new MongoClient(mongodbUri);
+        await client.connect();
+
+        return new Response(
+            JSON.stringify({
+                success: true,
+                message: "Successfully connected to MongoDB!",
+            }),
+            { status: 200, headers: { "Content-Type": "application/json" } }
+        );
     } catch (error) {
-        return res.status(500).json({
-            success: false,
-            message: "An error occurred while checking MONGODB_URI.",
-            error: error.message,
-        });
+        return new Response(
+            JSON.stringify({
+                success: false,
+                message: "Failed to connect to MongoDB.",
+                error: error.message,
+            }),
+            { status: 500, headers: { "Content-Type": "application/json" } }
+        );
     }
 }
