@@ -1,4 +1,4 @@
-import { MongoClient } from "mongodb";
+import clientPromise from "@/app/lib/mongodb";
 
 // Function to generate a random short string
 function generateFlyurl(length = 8) {
@@ -11,13 +11,6 @@ function generateFlyurl(length = 8) {
 }
 
 export async function POST(req) {
-
-    const uri = process.env.MONGODB_URI; // Your MongoDB URI
-    const options = {};
-
-    const mongo = new MongoClient(uri, options);
-    const clientPromise = mongo.connect();
-
     try {
         // Parse the request body
         const body = await req.json();
