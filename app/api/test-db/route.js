@@ -1,10 +1,8 @@
-import { MongoClient } from "mongodb";
-
 export async function GET(req) {
     try {
-        // Read the MongoDB URI from environment variables
         const mongodbUri = process.env.MONGODB_URI;
 
+        // Check if MONGODB_URI exists
         if (!mongodbUri) {
             return new Response(
                 JSON.stringify({
@@ -15,14 +13,11 @@ export async function GET(req) {
             );
         }
 
-        // Attempt to connect to MongoDB
-        const client = new MongoClient(mongodbUri);
-        await client.connect();
-
         return new Response(
             JSON.stringify({
                 success: true,
-                message: "Successfully connected to MongoDB!",
+                message: "MONGODB_URI is set and readable.",
+                uri: mongodbUri,
             }),
             { status: 200, headers: { "Content-Type": "application/json" } }
         );
@@ -30,7 +25,7 @@ export async function GET(req) {
         return new Response(
             JSON.stringify({
                 success: false,
-                message: "Failed to connect to MongoDB.",
+                message: "An error occurred while checking MONGODB_URI.",
                 error: error.message,
             }),
             { status: 500, headers: { "Content-Type": "application/json" } }
