@@ -1,33 +1,24 @@
-import clientPromise from "@/app/lib/mongodb";
-
-export async function GET(req) {
+export default async function handler(req, res) {
     try {
-        // Connect to MongoDB
-        const client = await clientPromise;
-        const db = client.db("links-fly");
+        const mongodbUri = process.env.MONGODB_URI;
 
-        // Test the connection by listing collections or retrieving data
-        const collections = await db.listCollections().toArray();
-
-        // Return success response
-        return new Response(
-            JSON.stringify({
-                success: true,
-                message: "Connected to MongoDB successfully!",
-                collections: collections.map((c) => c.name), // List collection names
-            }),
-            { status: 200, headers: { "Content-Type": "application/json" } }
-        );
-    } catch (error) {
-        // Return error response
-        console.error("MongoDB connection failed:", error);
-        return new Response(
-            JSON.stringify({
+        if (!mongodbUri) {
+            return res.status(400).json({
                 success: false,
-                message: "Failed to connect to MongoDB",
-                error: error.message,
-            }),
-            { status: 500, headers: { "Content-Type": "application/json" } }
-        );
+                message: "MONGODB_URI is not set in the environment variables.",
+            });
+        }
+
+        return res.status(200).json({
+            success: true,
+            message: "MONGODB_URI is set correctly.",
+            uri: mongodbUri, // For security, avoid returning the full URI in production
+        });
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            message: "An error occurred while checking MONGODB_URI.",
+            error: error.message,
+        });
     }
 }
