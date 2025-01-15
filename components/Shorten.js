@@ -10,10 +10,15 @@ const Shorten = () => {
     const [isCopied, setIsCopied] = useState("");
 
     const flyLink = () => {
+        // const isValidURL = (input) => {
+        //     const urlPattern = /^(https?:\/\/)([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}(:\d+)?(\/[\w\-._~:/?#[\]@!$&'()*+,;=]*)?$/;
+        //     return urlPattern.test(input);
+        // };
         const isValidURL = (input) => {
             const urlPattern = /^(https?:\/\/)([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}(:\d+)?(\/[\w\-._~:/?#[\]@!$&'()*+,;=]*)?$/;
-            return urlPattern.test(input);
+            return urlPattern.test(input) || /https?:\/\/\S+/i.test(input);
         };
+
         if (userURL !== "" && isValidURL(userURL)) {
             var myHeaders = new Headers();
             myHeaders.append("Content-Type", "application/json");
