@@ -88,7 +88,7 @@ const Shorten = () => {
                             <div className="text-green-500 text-sm md:text-base mt-2">{isCopied}</div>
                         )}
 
-                        {!isFly ? <button onClick={flyLink} className='btn btn-outline font-bold flex flex-col justify-center items-center mt-2 rounded-2xl w-56 text-base'><img src="/URL-BORDERD.gif" className='w-5' /><span>Fly your link for free</span></button> : <button onClick={flyAgain} className='btn btn-outline font-bold flex flex-col justify-center items-center mt-2 rounded-2xl w-56 text-base'><img src="/URL-BORDERD.gif" className='w-5' /><span>Fly your links again?</span></button>}
+                        {!isFly ? <button onClick={flyLink} className='btn btn-outline font-bold flex flex-col justify-center items-center mt-2 rounded-2xl w-56 text-base'><img src="/URL-BORDERD.gif" className='w-5' /><span>Fly your link for free</span></button> : <button onClick={flyAgain} className='btn btn-outline w-full font-bold flex flex-col justify-center items-center mt-2 rounded-2xl w-56 text-base'><img src="/URL-BORDERD.gif" className='w-5' /><span>Fly your links again?</span></button>}
                     </span>
                 </div>
             </div>
