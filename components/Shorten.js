@@ -11,7 +11,7 @@ const Shorten = () => {
 
     const flyLink = () => {
         const isValidURL = (input) => {
-            const urlPattern = /^(https?:\/\/)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}(\/\S*)?$/;
+            const urlPattern = /^(https?:\/\/)([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}(:\d+)?(\/[\w\-._~:/?#[\]@!$&'()*+,;=]*)?$/;
             return urlPattern.test(input);
         };
         if (userURL !== "" && isValidURL(userURL)) {
@@ -71,21 +71,21 @@ const Shorten = () => {
         <div>
             <div className="card bg-[#1d1d2a]/75 rounded-[3.6rem] w-[75%] h-[22rem] mx-auto ">
                 <div className='card-body justify-between mb-2 '>
-                    <span className='flex flex-col gap-1 justify-center' >
-                        <div className="card-title text-3xl px-2 font-bold ">Shorten a Long Link</div>
+                    <span className='flex flex-col gap-1 justify-center items-center md:items-start' >
+                        <div className="card-title md:text-3xl px-2 font-bold ">Shorten a Long Link</div>
                         <div className="px-2">for absolutely Free</div>
                     </span>
-                    <span className='flex flex-col px-2 gap-2' >
-                        <label htmlFor="linkInput" className='card-title font-bold' >{!isFly ? "Paste your long link here" : "Your link is ready to fly!🛫"}</label>
+                    <span className='flex flex-col px-2 gap-2 items-center md:items-start ' >
+                        <label htmlFor="linkInput" className='card-title font-bold text-sm md:text-xl' >{!isFly ? "Paste your long link here" : "Your link is ready to fly!🛫"}</label>
 
-                        {!isFly ? <input value={userURL} onChange={e => { setUserURL(e.target.value) }} id='linkInput' type="url" placeholder='https://example.com/a-long-url' className='linkInput bg-transparent flex-1 p-3 outline-none border border-base-100 rounded-lg hover:border-primary' /> : <button onClick={copyToClipboard} className="btn text-xl border border-base-100 rounded-lg hover:border-primary">{flyURL}</button>}
+                        {!isFly ? <input value={userURL} onChange={e => { setUserURL(e.target.value) }} id='linkInput' type="url" placeholder='https://example.com/a-long-url' className='linkInput w-full bg-transparent flex-1 p-3 outline-none border border-base-100 rounded-lg hover:border-primary' /> : <button onClick={copyToClipboard} className="btn md:text-xl border border-base-100 rounded-lg hover:border-primary">{flyURL}</button>}
 
                         {errorMessage && (
-                            <div className="text-red-500 mt-2">{errorMessage}</div>
+                            <div className="text-red-500 text-sm md:text-base mt-2">{errorMessage}</div>
                         )}
 
                         {isCopied && (
-                            <div className="text-green-500 mt-2">{isCopied}</div>
+                            <div className="text-green-500 text-sm md:text-base mt-2">{isCopied}</div>
                         )}
 
                         {!isFly ? <button onClick={flyLink} className='btn btn-outline font-bold flex flex-col justify-center items-center mt-2 rounded-2xl w-56 text-base'><img src="/URL-BORDERD.gif" className='w-5' /><span>Fly your link for free</span></button> : <button onClick={flyAgain} className='btn btn-outline font-bold flex flex-col justify-center items-center mt-2 rounded-2xl w-56 text-base'><img src="/URL-BORDERD.gif" className='w-5' /><span>Fly your links again?</span></button>}

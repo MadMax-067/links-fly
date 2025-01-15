@@ -1,14 +1,13 @@
 import React from 'react'
-import Image from 'next/image'
 import { FaGithub } from 'react-icons/fa';
 import Link from 'next/link';
 
 const Footer = () => {
     return (
-        <footer className="footer bg-transparent text-neutral-content items-center p-4">
+        <footer className="footer flex w-full justify-between fixed bottom-0 bg-transparent text-neutral-content items-center p-4">
             <aside className="grid-flow-col items-center">
                 <span>
-                    <Image src="/weeknd.jfif" height={50} width={50} alt='logo' className='rounded-full' />
+                    <img src="/weeknd.jfif" alt='logo' className='rounded-full w-12 h-12' />
                 </span>
                 <span className='flex flex-col' >
                     <p>Just a Fun Project made by Mad Max</p>
